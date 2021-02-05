@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Shax Barbatos\\source\\repos\\ComunicadosMVM-Api\\ComunicadosMVM-Api\\ComunicadosMVM-Api.csproj": {}
+    "C:\\Users\\Shax Barbatos\\Desktop\\ApiComunicados\\ComunicadosMVM-Api\\ComunicadosMVM-Api\\ComunicadosMVM-Api.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Shax Barbatos\\source\\repos\\ComunicadosMVM-Api\\ComunicadosMVM-Api\\ComunicadosMVM-Api.csproj": {
+    "C:\\Users\\Shax Barbatos\\Desktop\\ApiComunicados\\ComunicadosMVM-Api\\ComunicadosMVM-Api\\ComunicadosMVM-Api.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Shax Barbatos\\source\\repos\\ComunicadosMVM-Api\\ComunicadosMVM-Api\\ComunicadosMVM-Api.csproj",
+        "projectUniqueName": "C:\\Users\\Shax Barbatos\\Desktop\\ApiComunicados\\ComunicadosMVM-Api\\ComunicadosMVM-Api\\ComunicadosMVM-Api.csproj",
         "projectName": "ComunicadosMVM-Api",
-        "projectPath": "C:\\Users\\Shax Barbatos\\source\\repos\\ComunicadosMVM-Api\\ComunicadosMVM-Api\\ComunicadosMVM-Api.csproj",
+        "projectPath": "C:\\Users\\Shax Barbatos\\Desktop\\ApiComunicados\\ComunicadosMVM-Api\\ComunicadosMVM-Api\\ComunicadosMVM-Api.csproj",
         "packagesPath": "C:\\Users\\Shax Barbatos\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Shax Barbatos\\source\\repos\\ComunicadosMVM-Api\\ComunicadosMVM-Api\\obj\\",
+        "outputPath": "C:\\Users\\Shax Barbatos\\Desktop\\ApiComunicados\\ComunicadosMVM-Api\\ComunicadosMVM-Api\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Microsoft\\Xamarin\\NuGet\\"
@@ -42,6 +42,10 @@
       "frameworks": {
         "netcoreapp2.2": {
           "dependencies": {
+            "AutoMapper": {
+              "target": "Package",
+              "version": "[10.1.1, )"
+            },
             "Microsoft.AspNetCore.App": {
               "suppressParent": "All",
               "target": "Package",
@@ -52,6 +56,20 @@
               "suppressParent": "All",
               "target": "Package",
               "version": "[2.2.0, )"
+            },
+            "Microsoft.EntityFrameworkCore.Design": {
+              "target": "Package",
+              "version": "[2.2.2, )"
+            },
+            "Microsoft.EntityFrameworkCore.SqlServer": {
+              "target": "Package",
+              "version": "[2.2.2, )"
+            },
+            "Microsoft.EntityFrameworkCore.Tools": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[2.2.2, )"
             },
             "Microsoft.NETCore.App": {
               "suppressParent": "All",

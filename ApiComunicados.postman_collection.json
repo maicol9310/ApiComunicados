@@ -1,0 +1,155 @@
+{
+	"info": {
+		"_postman_id": "0d92fda4-de56-4896-af6f-43430661053c",
+		"name": "ApiComunicados",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"Jan93\",\r\n    \"password\": \"Jan93\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:44333/api/Usuario/Login",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "44333",
+					"path": [
+						"api",
+						"Usuario",
+						"Login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "LoginAdmi",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"Michael28\",\r\n    \"password\": \"Michael28\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:44333/api/Administrador/Login",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "44333",
+					"path": [
+						"api",
+						"Administrador",
+						"Login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CrearComunicado",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "   { \"id\": 2,\r\n    \"usuarioId\": 3,\r\n    \"consecutivo\": \"CE00000000\",\r\n    \"externaInternaId\": 0,\r\n    \"texto\": null\r\n   }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:44333/api/UsuarioComunicadoes",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "44333",
+					"path": [
+						"api",
+						"UsuarioComunicadoes"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ConsultaComunicado",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://localhost:44333/api/UsuarioComunicadoes/1",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "44333",
+					"path": [
+						"api",
+						"UsuarioComunicadoes",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DeleteComunica",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "https://localhost:44333/api/UsuarioComunicadoes/1",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "44333",
+					"path": [
+						"api",
+						"UsuarioComunicadoes",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ListarExternaInterna",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": ""
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}

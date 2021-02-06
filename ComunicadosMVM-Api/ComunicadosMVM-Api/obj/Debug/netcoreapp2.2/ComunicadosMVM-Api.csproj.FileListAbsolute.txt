@@ -13,6 +13,6 @@ C:\Users\Shax Barbatos\Desktop\ApiComunicados\ComunicadosMVM-Api\ComunicadosMVM-
 C:\Users\Shax Barbatos\Desktop\ApiComunicados\ComunicadosMVM-Api\ComunicadosMVM-Api\obj\Debug\netcoreapp2.2\ComunicadosMVM-Api.genruntimeconfig.cache
 C:\Users\Shax Barbatos\Desktop\ApiComunicados\ComunicadosMVM-Api\ComunicadosMVM-Api\bin\Debug\netcoreapp2.2\ComunicadosMVM-Api.pdb
 C:\Users\Shax Barbatos\Desktop\ApiComunicados\ComunicadosMVM-Api\ComunicadosMVM-Api\obj\Debug\netcoreapp2.2\ComunicadosMVM-Api.csprojAssemblyReference.cache
-C:\Users\Shax Barbatos\Desktop\ApiComunicados\ComunicadosMVM-Api\ComunicadosMVM-Api\obj\Debug\netcoreapp2.2\ComunicadosMVM-Api.csproj.CoreCompileInputs.cache
 C:\Users\Shax Barbatos\Desktop\ApiComunicados\ComunicadosMVM-Api\ComunicadosMVM-Api\obj\Debug\netcoreapp2.2\ComunicadosMVM-Api.dll
 C:\Users\Shax Barbatos\Desktop\ApiComunicados\ComunicadosMVM-Api\ComunicadosMVM-Api\obj\Debug\netcoreapp2.2\ComunicadosMVM-Api.pdb
+C:\Users\Shax Barbatos\Desktop\ApiComunicados\ComunicadosMVM-Api\ComunicadosMVM-Api\obj\Debug\netcoreapp2.2\ComunicadosMVM-Api.csproj.CoreCompileInputs.cache

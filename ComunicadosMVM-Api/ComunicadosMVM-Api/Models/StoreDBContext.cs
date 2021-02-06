@@ -10,22 +10,14 @@ namespace ComunicadosMVM_Api.Models
         {
         }
 
-        public StoreDBContext(DbContextOptions<StoreDBContext> options)
-            : base(options)
-        {
-        }
-
         public virtual DbSet<Administrador> Administrador { get; set; }
         public virtual DbSet<ExternaInterna> ExternaInterna { get; set; }
         public virtual DbSet<Usuario> Usuario { get; set; }
         public virtual DbSet<UsuarioComunicado> UsuarioComunicado { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        public StoreDBContext(DbContextOptions<StoreDBContext> options) : base(options)
         {
-            if (!optionsBuilder.IsConfigured)
-            {
-                optionsBuilder.UseSqlServer("Server=DESKTOP-OBF1ALI\\SQLJANS;Database=StoreDB;User ID=sa;Password=12345");
-            }
+
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

@@ -14,6 +14,6 @@ namespace ComunicadosMVM_Api.DTOs
         public string Password { get; set; }
         public int? IdRol { get; set; }
 
-        public List<UsuarioDTO> Usuario { get; set; }
+        public List<UsuarioComunicadoDTO> UsuarioComunicado { get; set; }
     }
 }

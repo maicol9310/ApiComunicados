@@ -6,11 +6,13 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ComunicadosMVM_Api.Models;
+using ComunicadosMVM_Api.DTOs;
+using AutoMapper;
 
 namespace ComunicadosMVM_Api.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
+    [Produces("application/json")]
+    [Route("api/Employees")]
     public class AdministradorsController : ControllerBase
     {
         private readonly StoreDBContext _context;
@@ -20,37 +22,62 @@ namespace ComunicadosMVM_Api.Controllers
             _context = context;
         }
 
-        // GET: api/Administradors
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Administrador>>> GetAdministrador()
+        public IEnumerable<AdministradorDTO> GetAdministrador()
         {
-            return await _context.Administrador.ToListAsync();
+            return Mapper.Map<IEnumerable<AdministradorDTO>>(_context.Administrador.OrderBy(x => x.LastName).ThenBy(x => x.FirstName));
         }
 
-        // GET: api/Administradors/5
+        // GET: api/Employees/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Administrador>> GetAdministrador(int id)
+        public async Task<IActionResult> GetAdministrador([FromRoute] int id)
         {
-            var administrador = await _context.Administrador.FindAsync(id);
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var administrador = await _context.Administrador.SingleOrDefaultAsync(m => m.Id == id);
 
             if (administrador == null)
             {
                 return NotFound();
             }
 
-            return administrador;
+            return Ok(Mapper.Map<AdministradorDTO>(administrador));
         }
 
-        // PUT: api/Administradors/5
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutAdministrador(int id, Administrador administrador)
+        [HttpPost("Login")]
+        public async Task<IActionResult> Login([FromBody] dynamic credentials)
         {
+            var username = (string)credentials["username"];
+            var password = (string)credentials["password"];
+
+            var administrador = await _context.Administrador.SingleOrDefaultAsync(m => m.UserName == username && m.Password == password);
+
+            if (administrador == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(Mapper.Map<AdministradorDTO>(administrador));
+        }
+
+        // PUT: api/Employees/5
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutAdministrador([FromRoute] int id, [FromBody] AdministradorDTO administrador)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             if (id != administrador.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(administrador).State = EntityState.Modified;
+            _context.Entry(Mapper.Map<Administrador>(administrador)).State = EntityState.Modified;
 
             try
             {
@@ -71,21 +98,33 @@ namespace ComunicadosMVM_Api.Controllers
             return NoContent();
         }
 
-        // POST: api/Administradors
-        [HttpPost]
-        public async Task<ActionResult<Administrador>> PostAdministrador(Administrador administrador)
-        {
-            _context.Administrador.Add(administrador);
-            await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetAdministrador", new { id = administrador.Id }, administrador);
+        [HttpPost]
+        public async Task<IActionResult> PostAdministrador([FromBody] AdministradorDTO administrador)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var e = Mapper.Map<Administrador>(administrador);
+            _context.Administrador.Add(e);
+            await _context.SaveChangesAsync();
+            administrador.Id = e.Id;
+
+            return CreatedAtAction("GetAdministrado", new { id = e.Id }, administrador);
         }
 
-        // DELETE: api/Administradors/5
+
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Administrador>> DeleteAdministrador(int id)
+        public async Task<IActionResult> DeleteAdministrador([FromRoute] int id)
         {
-            var administrador = await _context.Administrador.FindAsync(id);
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var administrador = await _context.Administrador.SingleOrDefaultAsync(m => m.Id == id);
             if (administrador == null)
             {
                 return NotFound();
@@ -94,8 +133,9 @@ namespace ComunicadosMVM_Api.Controllers
             _context.Administrador.Remove(administrador);
             await _context.SaveChangesAsync();
 
-            return administrador;
+            return Ok(Mapper.Map<AdministradorDTO>(administrador));
         }
+
 
         private bool AdministradorExists(int id)
         {

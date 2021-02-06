@@ -6,11 +6,13 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ComunicadosMVM_Api.Models;
+using ComunicadosMVM_Api.DTOs;
+using AutoMapper;
 
 namespace ComunicadosMVM_Api.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
+    [Produces("application/json")]
+    [Route("api/OrderStatuses")]
     public class ExternaInternasController : ControllerBase
     {
         private readonly StoreDBContext _context;
@@ -20,37 +22,47 @@ namespace ComunicadosMVM_Api.Controllers
             _context = context;
         }
 
-        // GET: api/ExternaInternas
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ExternaInterna>>> GetExternaInterna()
+        public IEnumerable<ExternaInternaDTO> GetExternaInterna()
         {
-            return await _context.ExternaInterna.ToListAsync();
+            return Mapper.Map<IEnumerable<ExternaInternaDTO>>(_context.ExternaInterna.OrderBy(x => x.Name));
         }
 
-        // GET: api/ExternaInternas/5
+        // GET: api/OrderStatuses/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<ExternaInterna>> GetExternaInterna(int id)
+        public async Task<IActionResult> GetExternaInterna([FromRoute] int id)
         {
-            var externaInterna = await _context.ExternaInterna.FindAsync(id);
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var externaInterna = await _context.ExternaInterna.SingleOrDefaultAsync(m => m.Id == id);
 
             if (externaInterna == null)
             {
                 return NotFound();
             }
 
-            return externaInterna;
+            return Ok(Mapper.Map<ExternaInternaDTO>(externaInterna));
         }
 
-        // PUT: api/ExternaInternas/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutExternaInterna(int id, ExternaInterna externaInterna)
+        public async Task<IActionResult> PutExternaInterna([FromRoute] int id, [FromBody] ExternaInternaDTO externaInterna)
         {
+            externaInterna.UsuarioComunicado = null;
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             if (id != externaInterna.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(externaInterna).State = EntityState.Modified;
+            _context.Entry(Mapper.Map<ExternaInterna>(externaInterna)).State = EntityState.Modified;
 
             try
             {
@@ -71,21 +83,35 @@ namespace ComunicadosMVM_Api.Controllers
             return NoContent();
         }
 
-        // POST: api/ExternaInternas
+        // POST: api/OrderStatuses
         [HttpPost]
-        public async Task<ActionResult<ExternaInterna>> PostExternaInterna(ExternaInterna externaInterna)
+        public async Task<IActionResult> PostExternaInterna([FromBody] ExternaInternaDTO externaInterna)
         {
-            _context.ExternaInterna.Add(externaInterna);
-            await _context.SaveChangesAsync();
+            externaInterna.UsuarioComunicado = null;
 
-            return CreatedAtAction("GetExternaInterna", new { id = externaInterna.Id }, externaInterna);
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var os = Mapper.Map<ExternaInterna>(externaInterna);
+
+            _context.ExternaInterna.Add(os);
+            await _context.SaveChangesAsync();
+            externaInterna.Id = os.Id;
+
+            return CreatedAtAction("GetExternaInterna", new { id = os.Id }, externaInterna);    
         }
 
-        // DELETE: api/ExternaInternas/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<ExternaInterna>> DeleteExternaInterna(int id)
+        public async Task<IActionResult> DeleteExternaInterna([FromRoute] int id)
         {
-            var externaInterna = await _context.ExternaInterna.FindAsync(id);
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var externaInterna = await _context.ExternaInterna.SingleOrDefaultAsync(m => m.Id == id);
             if (externaInterna == null)
             {
                 return NotFound();
@@ -94,7 +120,7 @@ namespace ComunicadosMVM_Api.Controllers
             _context.ExternaInterna.Remove(externaInterna);
             await _context.SaveChangesAsync();
 
-            return externaInterna;
+            return Ok(Mapper.Map<ExternaInternaDTO>(externaInterna));
         }
 
         private bool ExternaInternaExists(int id)

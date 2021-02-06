@@ -12,7 +12,7 @@ using AutoMapper;
 namespace ComunicadosMVM_Api.Controllers
 {
     [Produces("application/json")]
-    [Route("api/OrderStatuses")]
+    [Route("api/ExternaInterna")]
     public class ExternaInternasController : ControllerBase
     {
         private readonly StoreDBContext _context;

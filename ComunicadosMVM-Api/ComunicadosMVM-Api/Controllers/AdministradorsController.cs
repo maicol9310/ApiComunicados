@@ -12,7 +12,7 @@ using AutoMapper;
 namespace ComunicadosMVM_Api.Controllers
 {
     [Produces("application/json")]
-    [Route("api/Employees")]
+    [Route("api/Administrador")]
     public class AdministradorsController : ControllerBase
     {
         private readonly StoreDBContext _context;

@@ -6,9 +6,12 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ComunicadosMVM_Api.Models;
+using ComunicadosMVM_Api.DTOs;
+using AutoMapper;
 
 namespace ComunicadosMVM_Api.Controllers
 {
+    [Produces("application/json")]
     [Route("api/[controller]")]
     [ApiController]
     public class UsuariosController : ControllerBase
@@ -20,37 +23,56 @@ namespace ComunicadosMVM_Api.Controllers
             _context = context;
         }
 
-        // GET: api/Usuarios
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Usuario>>> GetUsuario()
+        //GET: api/Usuario/Page/3/30
+        //[HttpGet("Page/{pag}/{tam}")]
+        public IEnumerable<UsuarioDTO> GetUsuario([FromRoute] int pag, [FromRoute] int tam)
         {
-            return await _context.Usuario.ToListAsync();
+            var model = _context.Usuario.Skip(tam * pag - 1).Take(tam).OrderBy(x => x.LastName).ThenBy(x => x.FirstName);
+            var dto = Mapper.Map<IEnumerable<UsuarioDTO>>(model);
+            return dto;
         }
 
-        // GET: api/Usuarios/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Usuario>> GetUsuario(int id)
+        [HttpGet("")]
+        public IEnumerable<UsuarioDTO> GetUsuario()
         {
-            var usuario = await _context.Usuario.FindAsync(id);
+            var model = _context.Usuario.OrderBy(x => x.LastName).ThenBy(x => x.FirstName);
+            var dto = Mapper.Map<IEnumerable<UsuarioDTO>>(model);
+            return dto;
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetUsuario([FromRoute] int id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var usuario = await _context.Usuario.SingleOrDefaultAsync(m => m.Id == id);
 
             if (usuario == null)
             {
                 return NotFound();
             }
 
-            return usuario;
+            return Ok(Mapper.Map<UsuarioDTO>(usuario));
         }
 
-        // PUT: api/Usuarios/5
+
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutUsuario(int id, Usuario usuario)
+        public async Task<IActionResult> PutUsuario([FromRoute] int id, [FromBody] UsuarioDTO usuario)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             if (id != usuario.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(usuario).State = EntityState.Modified;
+            _context.Entry(Mapper.Map<Usuario>(usuario)).State = EntityState.Modified;
 
             try
             {
@@ -71,21 +93,51 @@ namespace ComunicadosMVM_Api.Controllers
             return NoContent();
         }
 
-        // POST: api/Usuarios
-        [HttpPost]
-        public async Task<ActionResult<Usuario>> PostUsuario(Usuario usuario)
-        {
-            _context.Usuario.Add(usuario);
-            await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetUsuario", new { id = usuario.Id }, usuario);
+        [HttpPost]
+        public async Task<IActionResult> PostUsuario([FromBody] UsuarioDTO usuario)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var map = Mapper.Map <Usuario>(usuario);
+
+            _context.Usuario.Add(map);
+            await _context.SaveChangesAsync();
+            usuario.Id = map.Id;
+
+            return CreatedAtAction("GetUsuario", new { id = map.Id }, usuario);
         }
 
-        // DELETE: api/Usuarios/5
-        [HttpDelete("{id}")]
-        public async Task<ActionResult<Usuario>> DeleteUsuario(int id)
+
+
+        [HttpPost("Login")]
+        public async Task<IActionResult> Login([FromBody] dynamic credentials)
         {
-            var usuario = await _context.Usuario.FindAsync(id);
+            var username = (string)credentials["username"];
+            var password = (string)credentials["password"];
+
+            var usuario = await _context.Usuario.SingleOrDefaultAsync(m => m.UserName == username && m.Password == password);
+
+            if (usuario == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(Mapper.Map<UsuarioDTO>(usuario));
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteUsuario([FromRoute] int id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var usuario = await _context.Usuario.SingleOrDefaultAsync(m => m.Id == id);
             if (usuario == null)
             {
                 return NotFound();
@@ -94,7 +146,7 @@ namespace ComunicadosMVM_Api.Controllers
             _context.Usuario.Remove(usuario);
             await _context.SaveChangesAsync();
 
-            return usuario;
+            return Ok(Mapper.Map<UsuarioDTO>(usuario));
         }
 
         private bool UsuarioExists(int id)

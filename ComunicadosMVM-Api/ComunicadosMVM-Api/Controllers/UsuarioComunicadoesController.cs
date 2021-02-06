@@ -11,8 +11,8 @@ using AutoMapper;
 
 namespace ComunicadosMVM_Api.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
+    [Produces("application/json")]
+    [Route("api/UsuarioComunicadoes")]
     public class UsuarioComunicadoesController : ControllerBase
     {
         private readonly StoreDBContext _context;
@@ -27,6 +27,12 @@ namespace ComunicadosMVM_Api.Controllers
         public IEnumerable<UsuarioComunicadoDTO> GetUsuarioComunicado()
         {
             return Mapper.Map<IEnumerable<UsuarioComunicadoDTO>>(_context.UsuarioComunicado.OrderByDescending(x => x.UsuarioId));
+        }
+
+        [HttpGet("Usuario/{UsuarioId}")]
+        public IEnumerable<UsuarioComunicadoDTO> GetUsuario_UsuarioComunicado([FromRoute] int usuarioId)
+        {
+            return Mapper.Map<IEnumerable<UsuarioComunicadoDTO>>(_context.UsuarioComunicado.Where(x => x.UsuarioId == usuarioId).OrderByDescending(x => x.UsuarioId));
         }
 
         // GET: api/UsuarioComunicadoes/5
